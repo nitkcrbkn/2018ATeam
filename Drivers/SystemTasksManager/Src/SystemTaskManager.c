@@ -22,7 +22,7 @@
 #include "MW_IWDG.h"
 
 volatile uint32_t g_SY_system_counter;
-volatile uint8_t g_rc_data[RC_DATA_NUM]={0x0,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,};
+volatile uint8_t g_rc_data[RC_DATA_NUM];
 static uint8_t rc_rcv[RC_DATA_NUM];
 volatile led_mode_t g_led_mode = lmode_1;
 static volatile unsigned int count_for_rc = 0;
@@ -64,9 +64,8 @@ int main(void){
 
   message("msg", "start!!\n");
   MW_printf("\033[2J\033[1;1H");
-  
-  while( 1 ){
-   
+  flush();
+  while( 1 ){   
     MW_IWDGClr();//reset counter of watch dog  
 
     SY_doAppTasks();
@@ -253,7 +252,7 @@ void SY_GPIOInit(void){
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle){
   UNUSED(UartHandle);
-  DD_RCTask(rc_rcv, (uint8_t*)g_rc_data);
+  if(DD_RCTask(rc_rcv, (uint8_t*)g_rc_data)!=0)message("err","rc err");
   count_for_rc = 0;
 }
 
