@@ -28,8 +28,8 @@
 #define __RC_R2	0x10
 
 #define __RC_None 0x0
-#define __RC_BT1  0x1
-#define __RC_BT2  0x2
+#define __RC_BT1  0x2
+#define __RC_BT2  0x1
 #define __RC_LY	  0x3
 #define __RC_LX	  0x4
 #define __RC_RY	  0x5
