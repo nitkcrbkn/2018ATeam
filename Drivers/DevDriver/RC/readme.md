@@ -1,27 +1,43 @@
 ## RC
 
-表示形式は
+表示形式は押したボタンが黄色くなります。
 ```
-RC btn:[Up,Lf,Dw,Ri,Cr,Tr,Sq,Cs,L1,L2,R1,R2]
-RC analog[<LX>:dec,<LY>:dec][<RX>:dec,<RY>:dec]
+↑  ↓  →  ←  □  X  ○  △  L1  L2  R1  R2 
+(<LX>:dec,<LY>:dec),(<RX>:dec,<RY>:dec)
 ```
 です。
 
 ### 用意した関数
 #### システム系
-- int DD_RCInit(uint8_t setdata[RC_DATA_NUM],uint32_t timeout);
+- `int DD_RCInit(uint8_t setdata[RC_DATA_NUM],uint32_t timeout);`
 
 RCと通信するための初期化をします。接続街も含み、timeoutで諦めます。
 
-- DD_RCTask(uint8_t rcv_data[RC_DATA_NUM],uint8_t setdata[RC_DATA_NUM]);
+- `DD_RCTask(uint8_t rcv_data[RC_DATA_NUM],uint8_t setdata[RC_DATA_NUM]);`
 
 リモコンのデータを処理し、並び替えてsetdataに格納します。
 
-- void DD_RCPrint(DD_MDHand_t *dmd);
+- `void DD_RCPrint(DD_MDHand_t *dmd);`
 RCの中身を表示します。　
 
 #### データ取得系
-アナログデータを取得します。
+	アナログデータを取得します。-64~63の範囲です。原点は(0,0)です。
+```
++-------------------+
+|+(-63,-63)         |
+|	      |         |
+|		  |         |
+|		  |(0,0)    |
+|---------*-------->|
+|		  |         |
+|		  |         |
+|		  |         |
+|         ↓       +(63,63)
++-------------------+
+```
+
+
+
 ```c
 /*アナログデータ取得*/
 int DD_RCGetLX(volatile uint8_t data[RC_DATA_NUM]);
@@ -31,6 +47,7 @@ int DD_RCGetRY(volatile uint8_t data[RC_DATA_NUM]);
 ```
 
 ボタンの状態を得ます。
+
 ```c
 #define __RC_ISPRESSED_CIRCLE(x) !(x[__RC_Marutoka]&__RC_Circle)
 #define __RC_ISPRESSED_TRIANGLE(x) !(x[__RC_Marutoka]&__RC_Tri)
