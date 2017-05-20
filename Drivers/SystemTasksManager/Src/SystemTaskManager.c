@@ -47,45 +47,58 @@ int SY_doDevDriverTasks(void);
 int main(void){
   int ret;
 
+  //システムを初期化します
   ret = SY_init();
   if( ret ){
     message("err", "initialize Faild%d", ret);
     MW_waitForMessageTransitionComplete(100);
     return EXIT_FAILURE;
   }
+  //(未実装)I2Cデバイスのチェックをします
   ret = SY_I2CConnTest(10);
   if( ret ){
     message("err", "I2CConnectionTest Faild%d", ret);
     MW_waitForMessageTransitionComplete(100);
     return EXIT_FAILURE;
     }
-  
+
+  //ここから開始します。
   g_SY_system_counter = 0;
 
   message("msg", "start!!\n");
   MW_printf("\033[2J\033[1;1H");
   flush();
-  while( 1 ){   
+
+  //アプリケーションを開始するためのループです。
+  while( 1 ){
+    //ウォッチドックタイマーをリセットします
     MW_IWDGClr();//reset counter of watch dog  
 
+    //個々のアプリケーションの実行をします。
     SY_doAppTasks();
+    //もしメッセージを出すタイミングであれば
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
-      MW_printf("\033[1;1H");
-      DD_RCPrint((uint8_t*)g_rc_data);
-      DD_print();
-      MW_printf("$%d",(int)g_led_mode);
+      MW_printf("\033[1;1H");//カーソルを(1,1)にセットして
+      DD_RCPrint((uint8_t*)g_rc_data);//RCのハンドラを表示します
+      DD_print();//各デバイスハンドラを表示します
+      MW_printf("$%d",(int)g_led_mode);//LEDのモードも表示します
       flush(); /* out message. */
     }
+    //タイミング待ちを行います
     while( g_SY_system_counter % _INTERVAL_MS != _INTERVAL_MS / 2 - 1 ){
     }
 #if !_NO_DEVICE
+    //デバイスがあれば、各デバイスタスクを実行します。これはハンドラに格納されているデータをMDに転送する内容などが含まれます。
     ret = SY_doDevDriverTasks();
 #endif
+    //エラー処理です
     if( ret ){
       message("err", "Device Driver Tasks Faild%d", ret);
     }
+    //タイミング待ちを行います
     while( g_SY_system_counter % _INTERVAL_MS != 0 ){
     }
+    //もし一定時間以上応答がない場合はRCが切断されたとみなし、リセットをかけます。
     count_for_rc++;
     if(count_for_rc >= 20){
       message("err","RC disconnected!");
@@ -175,6 +188,9 @@ int SY_init(void){
   return EXIT_SUCCESS;
 } /* SY_init */
 
+/**
+   oscの設定を行います。
+ */
 static
 int SY_clockInit(void){
   RCC_OscInitTypeDef RCC_OscInitStruct;
