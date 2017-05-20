@@ -2,6 +2,22 @@
 
 詳しくは別途pdfを参考。ここでは一連の処理の過程を書きます。mainのエントリーポイントもここにあります。
 
+## ハンドラの宣言
+```c
+volatile uint32_t g_SY_system_counter;
+volatile uint8_t g_rc_data[RC_DATA_NUM];
+static uint8_t rc_rcv[RC_DATA_NUM];
+volatile led_mode_t g_led_mode = lmode_1;
+static volatile unsigned int count_for_rc = 0;
+```
+- `g_SY_system_counter`システムのカウンタ
+- `g_rc_data`リモコンのデータ
+- `rc_rcv`リモコンからの生データ
+- `g_led_mode`テープLEDのモードを保持
+- `count_for_rc`リモコンからのデータのカウント用
+**ユーザーが意識するところはリモコンのデータとLEDのデータである。**
+**他のハンドラはAppの中のDeviceDefinitionに入っている。各自必要に応じて変更すること。**
+
 ## 動作
 
 1. システムの初期化
