@@ -30,10 +30,10 @@
 #define __RC_None 0x0
 #define __RC_BT1  0x2
 #define __RC_BT2  0x1
-#define __RC_LY	  0x3
-#define __RC_LX	  0x4
-#define __RC_RY	  0x5
-#define __RC_RX	  0x6
+#define __RC_LY	  0x4
+#define __RC_LX	  0x3
+#define __RC_RY	  0x6
+#define __RC_RX	  0x5
 #define __RC_CSM  0x7
 
 #define __RC_Start 0x3
