@@ -2,12 +2,12 @@
 #define __APP_H
 
 /*NO Device mode*/
-#define _NO_DEVICE 1
+#define _NO_DEVICE 0
 
 int appTask(void);
 int appInit(void);
 
-#define DD_NUM_OF_MD 2
+#define DD_NUM_OF_MD 4
 #define DD_NUM_OF_AB 1
 
 #define DD_USE_ENCODER1 0
