@@ -177,25 +177,53 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* hi2c)
   if(hi2c->Instance==I2C1)
   {
   /* USER CODE BEGIN I2C1_MspInit 0 */
-
   /* USER CODE END I2C1_MspInit 0 */
-  
+
     /**I2C1 GPIO Configuration    
     PB8     ------> I2C1_SCL
     PB9     ------> I2C1_SDA 
     */
     __HAL_RCC_GPIOB_CLK_ENABLE();
- 
+
+    /*********************************!!!SEE ERATTA!!!******************************/
+    
+    /*busy flag continue set...
+     * The SCL and SDA analog filter output is updated after a transition occurs on the SCL and SDA line respectively. The SCL and SDA transition can be forced by software configuring and SDA line level, the BUSY flag can be reset with a software reset, and the I2C can enter master mode.
+     */
+
+    /*deinit I2C1*/
+    I2C1->CR1 &= (uint16_t) ~((uint16_t) 0x8000);
+
+    /*configure as general GPIO Open-Drain*/
+    GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    
+    /*Set High*/
+    GPIOB->ODR |= (0x1<<8)|(0x1<<9);
+    /*wait until*/
+    while((GPIOB->IDR&((0x1<<8)|(0x1<<9)))!=((0x1<<8)|(0x1<<9)));
+    /*Set Low*/
+    GPIOB->ODR &= ~((0x1<<8)|(0x1<<9));
+    /*wait until*/
+    while((GPIOB->IDR&((0x1<<8)|(0x1<<9)))!=0);
+
+    /*pin configure*/
     GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
     __HAL_AFIO_REMAP_I2C1_ENABLE();
-
+    
     /* Peripheral clock enable */
     __HAL_RCC_I2C1_CLK_ENABLE();
-  /* USER CODE BEGIN I2C1_MspInit 1 */
+    /* USER CODE BEGIN I2C1_MspInit 1 */
+
+    /*turn on*/
+    I2C1->CR1 |= ((uint16_t) 0x8000);
+    /*turn off*/
+    I2C1->CR1 &= (uint16_t) ~((uint16_t) 0x8000);
 
   /* USER CODE END I2C1_MspInit 1 */
   }
@@ -229,6 +257,8 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* hi2c)
   if(hi2c->Instance==I2C1)
   {
   /* USER CODE BEGIN I2C1_MspDeInit 0 */
+    __HAL_RCC_I2C1_FORCE_RESET();
+    __HAL_RCC_I2C1_RELEASE_RESET();
 
   /* USER CODE END I2C1_MspDeInit 0 */
     /* Peripheral clock disable */
@@ -679,6 +709,8 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
   if(huart->Instance==USART1)
   {
   /* USER CODE BEGIN USART1_MspDeInit 0 */
+    __HAL_RCC_USART1_FORCE_RESET();
+    __HAL_RCC_USART1_RELEASE_RESET();
 
   /* USER CODE END USART1_MspDeInit 0 */
     /* Peripheral clock disable */
@@ -697,6 +729,8 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
   else if(huart->Instance==USART2)
   {
   /* USER CODE BEGIN USART2_MspDeInit 0 */
+    __HAL_RCC_USART2_FORCE_RESET();
+    __HAL_RCC_USART2_RELEASE_RESET();
 
   /* USER CODE END USART2_MspDeInit 0 */
     /* Peripheral clock disable */
@@ -715,6 +749,8 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
   else if(huart->Instance==USART3)
   {
   /* USER CODE BEGIN USART3_MspDeInit 0 */
+    __HAL_RCC_USART3_FORCE_RESET();
+    __HAL_RCC_USART3_RELEASE_RESET();
 
   /* USER CODE END USART3_MspDeInit 0 */
     /* Peripheral clock disable */
