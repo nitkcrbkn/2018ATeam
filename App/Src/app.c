@@ -116,8 +116,8 @@ int suspensionSystem(void){
     default:return EXIT_FAILURE;
     }
 
-    /*これは中央か?±3程度余裕を持つ必要がある。*/
-    if(abs(rc_analogdata)<CENTRAL_THRESHOLD){
+    /*これは中央か?*/
+    if(abs(rc_analogdata)==0){
       g_md_h[idx].mode = D_MMOD_FREE;
       g_md_h[idx].duty = 0;
     }
