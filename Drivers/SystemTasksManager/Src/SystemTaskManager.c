@@ -94,6 +94,7 @@ int main(void){
     //エラー処理です
     if( ret ){
       message("err", "Device Driver Tasks Faild%d", ret);
+      return EXIT_FAILURE;
     }
     //タイミング待ちを行います
     while( g_SY_system_counter % _INTERVAL_MS != 0 ){
