@@ -21,7 +21,9 @@
 
 /*I2Cのサポート用関数*/
 int DD_I2CSend(uint8_t add, const uint8_t *data, uint8_t size){
-  return MW_I2C1Transmit(add, data, size);
+  int ret = MW_I2C1Transmit(add, data, size);
+  if(ret)message("err","trans faild at (%x) size %d,data[0]=%d",add,size,data[0]);
+  return ret;
 }
 int DD_I2CReceive(uint8_t add, uint8_t *data, uint8_t size){
   return MW_I2C1Receive(add, data, size);
