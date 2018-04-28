@@ -69,14 +69,14 @@ int32_t MW_I2C2Transmit(uint8_t address, const uint8_t *data, uint16_t size){
 }
 
 int32_t MW_I2C1Receive(uint8_t address, uint8_t *data, uint16_t size){
-  if( HAL_I2C_Master_Receive(&hi2c1, address, data, size, 10) != HAL_OK ){
+  if( HAL_I2C_Master_Receive(&hi2c1, address * 2, data, size, 10) != HAL_OK ){
     return -1;
   }
   return 0;
 }
 
 int32_t MW_I2C2Receive(uint8_t address, uint8_t *data, uint16_t size){
-  if( HAL_I2C_Master_Receive(&hi2c2, address, data, size, 10) != HAL_OK ){
+  if( HAL_I2C_Master_Receive(&hi2c2, address * 2, data, size, 10) != HAL_OK ){
     return -1;
   }
   return 0;
