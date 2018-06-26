@@ -166,13 +166,14 @@ int SY_init(void){
 
   appInit();
   
+#if DD_USE_RC
   message("msg", "wait for RC connection...");
   if( DD_RCInit((uint8_t*)g_rc_data, 100000) ){
     message("err", "RC initialize faild!\n");
     return EXIT_FAILURE;
   }
-  
   message("msg", "RC connected sucess");
+#endif
   
   /*initialize IWDG*/
   message("msg", "IWDG initialize");
