@@ -14,6 +14,7 @@
 
 #include "DD_MD.h"
 #include "DD_AB.h"
+#include "DD_SS.h"
 #include "DD_SV.h"
 #include "DD_ENCODER.h"
 
@@ -24,6 +25,9 @@ extern DD_MDHand_t g_md_h[DD_NUM_OF_MD];
 #endif
 #if DD_NUM_OF_AB
 extern DD_ABHand_t g_ab_h[DD_NUM_OF_AB];
+#endif
+#if DD_NUM_OF_SS
+extern DD_SSHand_t g_ss_h[DD_NUM_OF_SS];
 #endif
 #if DD_NUM_OF_SV
 extern DD_SV_t g_sv_h;

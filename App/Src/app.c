@@ -81,13 +81,13 @@ static int LEDSystem(void){
 static 
 int ABSystem(void){
 
-  g_ab_h[0].dat = 0x00;
-  if(__RC_ISPRESSED_CIRCLE(g_rc_data)){
-    g_ab_h[0].dat |= AB0;
-  }
-  if(__RC_ISPRESSED_CROSS(g_rc_data)){
-    g_ab_h[0].dat |= AB1;
-  }
+  /* g_ab_h[0].dat = 0x00; */
+  /* if(__RC_ISPRESSED_CIRCLE(g_rc_data)){ */
+  /*   g_ab_h[0].dat |= AB0; */
+  /* } */
+  /* if(__RC_ISPRESSED_CROSS(g_rc_data)){ */
+  /*   g_ab_h[0].dat |= AB1; */
+  /* } */
 
   return EXIT_SUCCESS;
 }

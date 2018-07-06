@@ -7,9 +7,10 @@
 int appTask(void);
 int appInit(void);
 
-#define DD_NUM_OF_MD 4
-#define DD_NUM_OF_AB 1
+#define DD_NUM_OF_MD 2
+#define DD_NUM_OF_AB 0
 
+#define DD_NUM_OF_SS 1
 #define DD_USE_ENCODER1 0
 #define DD_USE_ENCODER2 0
 #define DD_NUM_OF_SV 0
@@ -17,6 +18,7 @@ int appInit(void);
 #include "DD_RC.h"
 #include "DD_MD.h"
 #include "DD_SV.h"
+#include "DD_SS.h"
 
 #define MECHA1_MD1 0
 #define MECHA1_MD2 1

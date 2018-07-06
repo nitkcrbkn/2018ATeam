@@ -16,6 +16,7 @@
 #include "DD_Gene.h"
 #include "DD_MD.h"
 #include "DD_AB.h"
+#include "DD_SS.h"
 #include "DD_ENCODER.h"
 #include "message.h"
 
@@ -55,7 +56,14 @@ int DD_doTasks(void){
       return ret;
     }
 #endif
-
+#if DD_NUM_OF_SS
+  for(i=0; i<DD_NUM_OF_SS; i++){
+    ret = DD_receive2SS(&g_ss_h[i]);
+    if( ret ){
+      return ret;
+    }
+  }
+#endif
 #if DD_USE_ENCODER1
   ret = DD_encoder1update();
   if( ret ){
@@ -87,6 +95,11 @@ void DD_print(void){
 #endif
 #if DD_NUM_OF_SV
   SV_print(&g_sv_h);
+#endif
+#if DD_NUM_OF_SS
+  for(i=0; i<DD_NUM_OF_SS; i++){
+    DD_SSHandPrint(&g_ss_h[i]);
+  }
 #endif
 #if DD_USE_ENCODER1 || DD_USE_ENCODER2
   DD_encoderprint();
