@@ -14,6 +14,8 @@ int appInit(void);
 #define DD_USE_ENCODER2 0
 #define DD_NUM_OF_SV 0
 
+#define DD_USE_RC 1
+
 #include "DD_RC.h"
 #include "DD_MD.h"
 #include "DD_SV.h"

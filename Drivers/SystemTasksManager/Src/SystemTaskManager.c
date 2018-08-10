@@ -100,11 +100,13 @@ int main(void){
     while( g_SY_system_counter % _INTERVAL_MS != 0 ){
     }
     //もし一定時間以上応答がない場合はRCが切断されたとみなし、リセットをかけます。
+#if DD_USE_RC
     count_for_rc++;
     if(count_for_rc >= 20){
       message("err","RC disconnected!");
       while(1);
     }
+#endif
   }
 } /* main */
 
@@ -166,13 +168,14 @@ int SY_init(void){
 
   appInit();
   
+#if DD_USE_RC
   message("msg", "wait for RC connection...");
   if( DD_RCInit((uint8_t*)g_rc_data, 100000) ){
     message("err", "RC initialize faild!\n");
     return EXIT_FAILURE;
   }
-  
   message("msg", "RC connected sucess");
+#endif
   
   /*initialize IWDG*/
   message("msg", "IWDG initialize");
