@@ -117,11 +117,14 @@ int DD_initialize(void){
     return EXIT_FAILURE;
   }
 
+  /*I2C2を用いたセンサを使用する場合、I2C2のInitを実行*/
+#if DD_NUM_OF_SS
   MW_SetI2CClockSpeed(I2C2ID, _I2C_SPEED_BPS);
   ret = MW_I2CInit(I2C2ID);
   if( ret ){
     return EXIT_FAILURE;
   }
+#endif
   
 #if DD_USE_ENCODER1
   ret = DD_InitEncoder1();

@@ -5,7 +5,7 @@
  * last update    : 20180501
  *
  * **overview***
- * MDの通信プロトコルを定める。
+ * SSの通信プロトコルを定める。
  *
  * ・I2Cのみのサポート
  */
@@ -32,9 +32,9 @@ int DD_receive2SS(DD_SSHand_t *dmd){
 
 
 /*
- * *SD handlerを表示。
+ * *SS handlerを表示。
  *
- * SD(Add:hex):[データサイズ],[受信データ]*データサイズ分
+ * SS(Add:hex):[データサイズ],[受信データ]*データサイズ分
  */
 
 void DD_SSHandPrint(DD_SSHand_t *dmd){
