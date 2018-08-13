@@ -116,6 +116,12 @@ int DD_initialize(void){
   if( ret ){
     return EXIT_FAILURE;
   }
+
+  MW_SetI2CClockSpeed(I2C2ID, _I2C_SPEED_BPS);
+  ret = MW_I2CInit(I2C2ID);
+  if( ret ){
+    return EXIT_FAILURE;
+  }
   
 #if DD_USE_ENCODER1
   ret = DD_InitEncoder1();
