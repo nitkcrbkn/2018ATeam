@@ -27,7 +27,7 @@ int DD_receive2SS(DD_SSHand_t *dmd){
    *引数として渡した配列に受信データが格納される
    *引数として渡す配列は、アドレスを渡す
    */
-  return DD_I2CReceive(dmd->add, dmd->data, dmd->data_size);
+  return DD_I2C2Receive(dmd->add, dmd->data, dmd->data_size);
 }
 
 

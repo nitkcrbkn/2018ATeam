@@ -26,8 +26,11 @@ int DD_I2CSend(uint8_t add, const uint8_t *data, uint8_t size){
   if(ret)message("err","trans faild at (%x) size %d,data[0]=%d",add,size,data[0]);
   return ret;
 }
-int DD_I2CReceive(uint8_t add, uint8_t *data, uint8_t size){
+int DD_I2C1Receive(uint8_t add, uint8_t *data, uint8_t size){
   return MW_I2C1Receive(add, data, size);
+}
+int DD_I2C2Receive(uint8_t add, uint8_t *data, uint8_t size){
+  return MW_I2C2Receive(add, data, size);
 }
 
 /*DeviceDriverのタスク*/
