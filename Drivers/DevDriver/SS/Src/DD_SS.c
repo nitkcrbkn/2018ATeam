@@ -40,7 +40,7 @@ int DD_receive2SS(DD_SSHand_t *dmd){
 void DD_SSHandPrint(DD_SSHand_t *dmd){
   MW_printf("SS(%02x):[%d]", dmd->add,dmd->data_size);
   for(int i=0;i<dmd->data_size;i++){
-    MW_printf("[%4d]",dmd->data[i]);
+    MW_printf("[%02x]",dmd->data[i]);
   }
   MW_printf("\n");
 }
