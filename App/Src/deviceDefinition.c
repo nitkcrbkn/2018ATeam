@@ -40,3 +40,11 @@ DD_SV_t g_sv_h = {
   }
 };
 #endif
+#if DD_NUM_OF_SS
+DD_SSHand_t g_ss_h[DD_NUM_OF_SS] = {
+  { .add = 0x16,    /*I2C address*/
+    .data_size = 2, /*最大8バイト 無駄なく宣言する*/
+    .data = {0,0,0,0,0,0,0,0},
+  }
+};
+#endif
