@@ -79,7 +79,11 @@ int main(void){
     //もしメッセージを出すタイミングであれば
     if( g_SY_system_counter % _MESSAGE_INTERVAL_MS < _INTERVAL_MS ){
       MW_printf("\033[1;1H");//カーソルを(1,1)にセットして
+#if DD_USE_RC
       DD_RCPrint((uint8_t*)g_rc_data);//RCのハンドラを表示します
+#else
+      MW_printf("RC disabled\n\n");
+#endif
       DD_print();//各デバイスハンドラを表示します
       MW_printf("$%d",(int)g_led_mode);//LEDのモードも表示します
       flush(); /* out message. */
