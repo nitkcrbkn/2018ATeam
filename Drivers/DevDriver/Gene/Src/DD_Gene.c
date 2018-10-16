@@ -16,7 +16,6 @@
 #include "DD_Gene.h"
 #include "DD_MD.h"
 #include "DD_AB.h"
-#include "DD_SS.h"
 #include "DD_ENCODER.h"
 #include "message.h"
 
@@ -26,12 +25,18 @@ int DD_I2CSend(uint8_t add, const uint8_t *data, uint8_t size){
   if(ret)message("err","trans faild at (%x) size %d,data[0]=%d",add,size,data[0]);
   return ret;
 }
-int DD_I2C1Receive(uint8_t add, uint8_t *data, uint8_t size){
+int DD_I2CReceive(uint8_t add, uint8_t *data, uint8_t size){
   return MW_I2C1Receive(add, data, size);
 }
-int DD_I2C2Receive(uint8_t add, uint8_t *data, uint8_t size){
-  return MW_I2C2Receive(add, data, size);
+
+int DD_I2CSlaveSend(uint8_t *data, uint16_t size){
+  return MW_I2C1SlaveTransmit(data, size);
 }
+
+int DD_I2CSlaveSend_IT(uint8_t *data, uint16_t size){
+  return MW_I2C1SlaveTransmit_IT(data, size);
+}
+
 
 /*DeviceDriverのタスク*/
 int DD_doTasks(void){
@@ -59,14 +64,7 @@ int DD_doTasks(void){
       return ret;
     }
 #endif
-#if DD_NUM_OF_SS
-  for(i=0; i<DD_NUM_OF_SS; i++){
-    ret = DD_receive2SS(&g_ss_h[i]);
-    if( ret ){
-      return ret;
-    }
-  }
-#endif
+
 #if DD_USE_ENCODER1
   ret = DD_encoder1update();
   if( ret ){
@@ -99,11 +97,6 @@ void DD_print(void){
 #if DD_NUM_OF_SV
   SV_print(&g_sv_h);
 #endif
-#if DD_NUM_OF_SS
-  for(i=0; i<DD_NUM_OF_SS; i++){
-    DD_SSHandPrint(&g_ss_h[i]);
-  }
-#endif
 #if DD_USE_ENCODER1 || DD_USE_ENCODER2
   DD_encoderprint();
 #endif
@@ -119,15 +112,6 @@ int DD_initialize(void){
   if( ret ){
     return EXIT_FAILURE;
   }
-
-  /*I2C2を用いたセンサを使用する場合、I2C2のInitを実行*/
-#if DD_NUM_OF_SS
-  MW_SetI2CClockSpeed(I2C2ID, _I2C_SPEED_BPS);
-  ret = MW_I2CInit(I2C2ID);
-  if( ret ){
-    return EXIT_FAILURE;
-  }
-#endif
   
 #if DD_USE_ENCODER1
   ret = DD_InitEncoder1();

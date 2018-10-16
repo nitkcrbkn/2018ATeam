@@ -33,6 +33,20 @@ static I2C_HandleTypeDef hi2c2 = {
     .NoStretchMode = I2C_NOSTRETCH_DISABLE,
   }
 };
+static I2C_HandleTypeDef hi2c3 = {
+  .Instance = I2C1,
+  .Init = {
+    .ClockSpeed = 100000,
+    .DutyCycle = I2C_DUTYCYCLE_2,
+    .OwnAddress1 = 0x30,
+    .AddressingMode = I2C_ADDRESSINGMODE_7BIT,
+    .DualAddressMode = I2C_DUALADDRESS_DISABLE,
+    .OwnAddress2 = 0,
+    .GeneralCallMode = I2C_GENERALCALL_DISABLE,
+    .NoStretchMode = I2C_NOSTRETCH_DISABLE,
+  },
+  .Mode = HAL_I2C_MODE_SLAVE
+};
 
 static I2C_HandleTypeDef *i2cid[2] = {
   &hi2c1,
@@ -53,30 +67,45 @@ int MW_I2CInit(i2cid_t id){
 }
 
 int32_t MW_I2C1Transmit(uint8_t address, const uint8_t *data, uint16_t size){
-  if( HAL_I2C_Master_Transmit(&hi2c1, address << 1, (uint8_t*)data, size, 10) != HAL_OK ){
+  /*what f**k transmit must not change data, buf argument is NOT constant.*/
+  if( HAL_I2C_Master_Transmit(&hi2c1, address * 2, (uint8_t*)data, size, 10) != HAL_OK ){
     return -1;
   }
   return 0;
 }
 
 int32_t MW_I2C2Transmit(uint8_t address, const uint8_t *data, uint16_t size){
-  if( HAL_I2C_Master_Transmit(&hi2c2, address << 1, (uint8_t*)data, size, 10) != HAL_OK ){
+  /*what f**k transmit must not change data, buf argument is NOT constant.*/
+  if( HAL_I2C_Master_Transmit(&hi2c2, address * 2, (uint8_t*)data, size, 10) != HAL_OK ){
     return -1;
   }
   return 0;
 }
 
 int32_t MW_I2C1Receive(uint8_t address, uint8_t *data, uint16_t size){
-  if( HAL_I2C_Master_Receive(&hi2c1, address << 1, data, size, 10) != HAL_OK ){
+  if( HAL_I2C_Master_Receive(&hi2c1, address, data, size, 10) != HAL_OK ){
     return -1;
   }
   return 0;
 }
 
 int32_t MW_I2C2Receive(uint8_t address, uint8_t *data, uint16_t size){
-  if( HAL_I2C_Master_Receive(&hi2c2, address << 1, data, size, 10) != HAL_OK ){
+  if( HAL_I2C_Master_Receive(&hi2c2, address, data, size, 10) != HAL_OK ){
     return -1;
   }
   return 0;
 }
 
+int32_t MW_I2C1SlaveTransmit(uint8_t *data, uint16_t size){
+  if( HAL_I2C_Slave_Transmit(&hi2c3 , (uint8_t*)data, size, 10) != HAL_OK ){
+    return -1;
+  }
+  return 0;
+}
+
+int32_t MW_I2C1SlaveTransmit_IT(uint8_t *data, uint16_t size){
+  if( HAL_I2C_Slave_Transmit_IT(&hi2c3 , (uint8_t*)data, size) != HAL_OK ){
+    return -1;
+  }
+  return 0;
+}
